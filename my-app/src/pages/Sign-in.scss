@@ -1,0 +1,20 @@
+.landing-logo {
+	display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+	row-gap:3rem;
+
+	.login-btn {
+		width:220px;
+		height: 42px;
+		padding: 8px, 22px, 8px, 22px;
+		border-radius: 4px;
+		background:  #E5173F;
+		&:hover{
+			background: darkred;
+		}
+	}
+}

@@ -1,0 +1,83 @@
+.header{
+	display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
+	column-gap:15rem;
+	.right-group{	
+		display: flex;
+	    flex-direction: row;
+	    flex-wrap: wrap;
+	    align-content: center;
+	    justify-content: flex-end;
+	    align-items: center;
+		column-gap: 1rem;
+	}
+	.left-group{
+		display: flex;
+	    flex-direction: row;
+	    flex-wrap: wrap;
+	    align-content: center;
+	    justify-content: space-between;
+	    align-items: center;
+	    column-gap: 1rem;
+	}
+}
+
+.arrow-btn {
+	width: 5rem;
+    height: 2rem;
+    color: #007A7A !important;
+    border-color: #007A7A  !important;
+}
+
+.search-field {
+	color: black;
+	& ::after{
+		color: black;
+		border-bottom: 2px solid #3b3030 !important;
+	}
+	label.Mui-focused {
+		color: black;
+	}
+}
+
+.today-btn {
+	width: 5rem;
+	color: black !important;
+	border: 1px solid black !important;
+    font-weight: 600 !important;
+}
+
+.new-event-btn {
+	background:  #E5173F !important;
+	&:hover{
+			background: darkred !important;
+		}
+}
+
+.menu-list ul li:not(:last-child) {
+	display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: flex-start;
+    justify-content: center;
+	.student-name {
+		font-weight: bold;
+	}
+}
+
+.menu-list ul li:last-child {
+	display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1rem;
+	font-weight: 400;
+	.log-out-icon {
+		color: grey;
+	}
+}
