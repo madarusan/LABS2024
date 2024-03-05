@@ -21,7 +21,7 @@ export type EventModalProps = {
 	onClose: (e?: any) => void;
 	eventDetails?: ICalendarEntry;
 };
-
+// 
 export const EventModal = ({
 	open,
 	onClose,
