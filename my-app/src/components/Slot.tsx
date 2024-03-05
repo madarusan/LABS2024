@@ -14,6 +14,7 @@ import { EventModal } from "./Event-Modal";
 export type SlotProps = {
 	details?: ICalendarEntry;
 };
+// 
 export const Slot = ({ details }: SlotProps) => {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const openMenu = Boolean(anchorEl);

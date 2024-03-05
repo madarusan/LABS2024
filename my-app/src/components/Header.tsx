@@ -22,6 +22,7 @@ export type HeaderProps = {
 	weekDates: string[];
 	setWeekDates: (dates: string[]) => void;
 };
+// 
 export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 	const navigate = useNavigate();
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

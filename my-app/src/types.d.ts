@@ -4,4 +4,4 @@ export interface ICalendarEntry {
 	timeStamp: string;
 	type: string;
 	location: string;
-}
+// }
