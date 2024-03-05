@@ -21,12 +21,14 @@ export const Slot = ({ details }: SlotProps) => {
 		setAnchorEl(event.currentTarget);
 	};
 	const handleCloseMenu = (event: React.MouseEvent<HTMLElement>) => {
-		setAnchorEl(null);
+	
 		if (event.currentTarget.textContent === "Edit") {
 			console.log("edit event");
+			handleClickOpen();
 		} else if (event.currentTarget.textContent === "Delete") {
 			console.log("delete event");
 		}
+		setAnchorEl(null);
 	};
 	const [open, setOpen] = useState(false);
 	const handleClickOpen = () => {
@@ -119,6 +121,11 @@ export const Slot = ({ details }: SlotProps) => {
 					<ListItemText>Delete</ListItemText>
 				</MenuItem>
 			</Menu>
+			<EventModal
+				open={open}
+				onClose={handleClose}
+				eventDetails={details}
+			/>
 		</Card>
 	);
 };

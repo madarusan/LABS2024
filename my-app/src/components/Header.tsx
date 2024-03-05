@@ -1,10 +1,28 @@
 import React , {useState} from "react";
 import "./Header.scss";
-import { TextField, Button, IconButton, Menu, MenuItem, Divider, Typography } from "@mui/material";
-import { Settings, ChevronLeft, ChevronRight, Logout } from "@mui/icons-material";
+import dayjs from "dayjs";
+import {
+	TextField,
+	Button,
+	IconButton,
+	Menu,
+	MenuItem,
+	Divider,
+	Typography,
+} from "@mui/material";
+import {
+	Settings,
+	ChevronLeft,
+	ChevronRight,
+	Logout,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { EventModal } from "./Event-Modal";
-export const Header = () => {
+export type HeaderProps = {
+	weekDates: string[];
+	setWeekDates: (dates: string[]) => void;
+};
+export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 	const navigate = useNavigate();
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const openMenu = Boolean(anchorEl);
@@ -25,18 +43,43 @@ export const Header = () => {
 	const handleClose = (value: string) => {
 		setOpen(false);
 	};
+
+	const changeWeek = (direction: string) => {
+		let newWeekDates = weekDates;
+		if (direction === "previous") {
+			newWeekDates = newWeekDates.map((date) => {
+				return dayjs(date, "Do MMMM")
+					.subtract(7, "day")
+					.format("Do MMMM");
+			});
+		} else if (direction === "next") {
+			newWeekDates = newWeekDates.map((date) => {
+				return dayjs(date, "Do MMMM").add(7, "day").format("Do MMMM");
+			});
+		} else if (direction === "today") {
+			const today = dayjs();
+			const startOfWeek = today.startOf('week').add(1, 'day'); // Start from Monday
+			newWeekDates = Array.from({ length: 5 }, (_, i) => // Only Monday to Friday
+				startOfWeek.add(i, 'day').format("Do MMMM")
+			);
+		}
+		setWeekDates(newWeekDates);
+	};
+
 	return (
 		<div className="header">
 			<div className="left-group">
 				<Button
 					variant="outlined"
 					className="arrow-btn"
+					onClick={() => changeWeek("previous")}
 				>
 					<ChevronLeft />
 				</Button>
 				<Button
 					variant="outlined"
 					className="arrow-btn"
+					onClick={() => changeWeek("next")}
 				>
 					<ChevronRight />
 				</Button>
@@ -47,10 +90,12 @@ export const Header = () => {
 					label="Search"
 					variant="standard"
 					className="search-field"
+					disabled
 				/>
 				<Button
 					variant="outlined"
 					className="today-btn"
+					onClick={() => changeWeek("today")}
 				>
 					TODAY
 				</Button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Button,
 	Dialog,
@@ -15,14 +15,20 @@ import {
 import { StaticDateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { ICalendarEntry } from "../types";
 export type EventModalProps = {
 	open: boolean;
 	onClose: (e?: any) => void;
+	eventDetails?: ICalendarEntry;
 };
 
-export const EventModal = ({ open, onClose }: EventModalProps) => {
+export const EventModal = ({
+	open,
+	onClose,
+	eventDetails,
+}: EventModalProps) => {
 	dayjs.extend(utc);
-	const [activityType, setActivityType] = useState("");
+	const [activityType, setActivityType] = useState("-1");
 	const [title, setTitle] = useState("");
 	const [location, setLocation] = useState("");
 	const [selectedDate, setSelectedDate] = useState(dayjs().toISOString());
@@ -57,6 +63,14 @@ export const EventModal = ({ open, onClose }: EventModalProps) => {
 			date: selectedDate,
 		});
 	};
+	useEffect(() => {
+		if (eventDetails) {
+			setActivityType(eventDetails.type);
+			setTitle(eventDetails.title);
+			setLocation(eventDetails.location);
+			setSelectedDate(eventDetails.timeStamp);
+		}
+	}, [eventDetails]);
 	return (
 		<Dialog
 			onClose={handleClose}
@@ -84,6 +98,7 @@ export const EventModal = ({ open, onClose }: EventModalProps) => {
 						name="title"
 						label="Title"
 						variant="standard"
+						value={title}
 						onChange={handleTitleChange}
 						sx={{
 							"label.Mui-focused": {
@@ -115,12 +130,12 @@ export const EventModal = ({ open, onClose }: EventModalProps) => {
 							label="Type"
 							onChange={handleTypeChange}
 						>
-							<MenuItem value="">
+							<MenuItem value={"-1"}>
 								<em>None</em>
 							</MenuItem>
-							<MenuItem value={0}>Curs</MenuItem>
-							<MenuItem value={1}>Laborator</MenuItem>
-							<MenuItem value={2}>Seminar</MenuItem>
+							<MenuItem value={"0"}>Curs</MenuItem>
+							<MenuItem value={"1"}>Laborator</MenuItem>
+							<MenuItem value={"2"}>Seminar</MenuItem>
 						</Select>
 					</FormControl>
 					<TextField
@@ -129,6 +144,7 @@ export const EventModal = ({ open, onClose }: EventModalProps) => {
 						name="location"
 						label="Location"
 						variant="standard"
+						value={location}
 						onChange={handleLocationChange}
 						sx={{
 							"label.Mui-focused": {
@@ -159,10 +175,10 @@ export const EventModal = ({ open, onClose }: EventModalProps) => {
 						".MuiDateCalendar-root": {
 							marginTop: "2rem",
 						},
-						
 					}}
 					defaultValue={dayjs()}
 					onChange={handleDateChange}
+					value={dayjs(selectedDate)}
 				/>
 			</DialogContent>
 			<DialogActions>
