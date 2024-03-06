@@ -11,10 +11,10 @@ import {
 	SelectChangeEvent,
 	TextField,
 	MenuItem,
+	Box,
 } from "@mui/material";
 import { StaticDateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { ICalendarEntry } from "../types";
 export type EventModalProps = {
 	open: boolean;
@@ -22,16 +22,19 @@ export type EventModalProps = {
 	eventDetails?: ICalendarEntry;
 };
 
+enum ActivityType { CURS = 'Curs', LABORATOR = 'Laborator', SEMINAR = 'Seminar'	}
+
 export const EventModal = ({
 	open,
 	onClose,
 	eventDetails,
 }: EventModalProps) => {
-	dayjs.extend(utc);
-	const [activityType, setActivityType] = useState("-1");
+
+	const date = new Date();
+	const [activityType, setActivityType] = useState('');
 	const [title, setTitle] = useState("");
 	const [location, setLocation] = useState("");
-	const [selectedDate, setSelectedDate] = useState(dayjs().toISOString());
+	const [selectedDate, setSelectedDate] = useState(date.toISOString());
 	const handleClose = (e: any) => {
 		onClose(e);
 	};
@@ -85,13 +88,7 @@ export const EventModal = ({
 					columnGap: "1rem",
 				}}
 			>
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "column",
-						rowGap: "1rem",
-					}}
-				>
+				<Box display={'flex'} flexDirection={'column'} gap={2} >
 					<TextField
 						required
 						id="title"
@@ -100,28 +97,15 @@ export const EventModal = ({
 						variant="standard"
 						value={title}
 						onChange={handleTitleChange}
-						sx={{
-							"label.Mui-focused": {
-								color: "#000",
-							},
-							".MuiInput-root::after": {
-								borderBottom: "2px solid #000",
-							},
-						}}
+						fullWidth
+					
 					/>
 					<FormControl
 						variant="standard"
 						required
+						fullWidth
 					>
-						<InputLabel
-							sx={{
-								"&.Mui-focused": {
-									color: "#000",
-								},
-								// "&::after": {   // not working to change the border-bottom from standard blue to black
-								// 	borderBottom: "2px solid #000",
-								// },
-							}}
+						<InputLabel id="type-label"
 						>
 							Type
 						</InputLabel>
@@ -129,13 +113,10 @@ export const EventModal = ({
 							value={activityType}
 							label="Type"
 							onChange={handleTypeChange}
+							labelId="type-label"
+							
 						>
-							<MenuItem value={"-1"}>
-								<em>None</em>
-							</MenuItem>
-							<MenuItem value={"0"}>Curs</MenuItem>
-							<MenuItem value={"1"}>Laborator</MenuItem>
-							<MenuItem value={"2"}>Seminar</MenuItem>
+							{Object.values(ActivityType).map((activity,index) => (<MenuItem value={index}>{activity}</MenuItem>))}						
 						</Select>
 					</FormControl>
 					<TextField
@@ -146,16 +127,9 @@ export const EventModal = ({
 						variant="standard"
 						value={location}
 						onChange={handleLocationChange}
-						sx={{
-							"label.Mui-focused": {
-								color: "#000",
-							},
-							".MuiInput-root::after": {
-								borderBottom: "2px solid #000",
-							},
-						}}
+						fullWidth
 					/>
-				</div>
+				</Box>
 				<StaticDateTimePicker
 					ampmInClock={true}
 					views={["day", "hours"]}
@@ -163,11 +137,11 @@ export const EventModal = ({
 						toolbar: {
 							hidden: true,
 						},
-						actionBar: ({ wrapperVariant }) => ({
+						actionBar: () => ({
 							actions: [],
 						}),
 					}}
-					sx={{
+sx={{
 						minHeight: "25rem",
 						".MuiTimeClock-root": {
 							marginTop: "2rem",
@@ -185,18 +159,14 @@ export const EventModal = ({
 				<Button
 					onClick={handleClose}
 					sx={{ color: "#000" }}
+					variant="text"
 				>
 					Cancel
 				</Button>
 				<Button
 					type="submit"
 					variant="contained"
-					sx={{
-						background: "#E5173F",
-						"&:hover": {
-							background: "darkred",
-						},
-					}}
+					color="primary"
 					onClick={handleSubmit}
 				>
 					Create

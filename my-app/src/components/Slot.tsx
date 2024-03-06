@@ -7,6 +7,8 @@ import {
 	MenuItem,
 	ListItemIcon,
 	ListItemText,
+	Box,
+	Divider,
 } from "@mui/material";
 import { Add, MoreVert, Edit, Delete } from "@mui/icons-material";
 import { ICalendarEntry } from "../types";
@@ -35,21 +37,22 @@ export const Slot = ({ details }: SlotProps) => {
 		setOpen(true);
 	};
 
-	const handleClose = (value: string) => {
+	const handleClose = () => {
 		setOpen(false);
 	};
 	const handleType = (type: number | string) => {
+		
 		if (type === 0) return "Curs";
 		else if (type === 1) return "Laborator";
 		else return "Seminar";
 	};
 	return !details ? (
-		<Card
+		<Card elevation={1}
 			sx={{
-				boxShadow: "0px 0px 0px 0px white",
+				
 				border: "1px dashed #006262",
 				background: "#0062620A",
-				display: "flex",
+				
 				justifyContent: "center",
 				width: "10rem",
 			}}
@@ -77,55 +80,62 @@ export const Slot = ({ details }: SlotProps) => {
 				justifyContent: "space-around",
 				background: "#006262",
 				color: "#fff",
-				width: "10rem",
+				maxWidth: "10rem",
 			}}
 		>
-			<div style={{ display: "flex", flexDirection: "column" }}>
-				<Typography>
-					{handleType(details.type) + " " + details.title}
+			<Box sx={{p:1}} >
+			<Typography variant="body2">
+					{handleType(details.type) }
 				</Typography>
-				<Typography>{details.location}</Typography>
-			</div>
-			<IconButton
+				<Divider />
+				<Typography variant="caption">
+					{ details.title}
+				</Typography>
+				<Typography variant="caption">{details.location}</Typography>
+			</Box>
+			<Box sx={{
+				display: "flex",
+				alignItems: "center",
+			}}>
+				<IconButton
 				aria-label="settings"
 				sx={{
 					color: "#fff",
-					"&:hover": {
-						background: "none",
-						color: "#cecece",
-					},
 				}}
 				onClick={handleClickMenu}
 			>
 				<MoreVert />
 			</IconButton>
-			<Menu
-				anchorEl={anchorEl}
-				id="account-menu"
-				open={openMenu}
-				onClose={handleCloseMenu}
-				onClick={handleCloseMenu}
-				transformOrigin={{ horizontal: "right", vertical: "top" }}
-				anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-			>
-				<MenuItem onClick={handleCloseMenu}>
-					<ListItemIcon>
-						<Edit fontSize="small" />
-					</ListItemIcon>
-					<ListItemText>Edit</ListItemText>
-				</MenuItem>
-				<MenuItem onClick={handleCloseMenu}>
-					<ListItemIcon>
-						<Delete fontSize="small" />
-					</ListItemIcon>
-					<ListItemText>Delete</ListItemText>
-				</MenuItem>
-			</Menu>
-			<EventModal
-				open={open}
-				onClose={handleClose}
-				eventDetails={details}
-			/>
+				<Menu
+					anchorEl={anchorEl}
+					id="account-menu"
+					open={openMenu}
+					onClose={handleCloseMenu}
+					onClick={handleCloseMenu}
+					transformOrigin={{ horizontal: "right", vertical: "top" }}
+					anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+				>
+					<MenuItem onClick={handleCloseMenu}>
+						<ListItemIcon>
+							<Edit fontSize="small" />
+						</ListItemIcon>
+						<ListItemText>Edit</ListItemText>
+					</MenuItem>
+					<MenuItem onClick={handleCloseMenu}>
+						<ListItemIcon>
+							<Delete fontSize="small" />
+						</ListItemIcon>
+						<ListItemText>Delete</ListItemText>
+					</MenuItem>
+				</Menu>
+				<EventModal
+					open={open}
+					onClose={handleClose}
+					eventDetails={details}
+				/>
+			</Box>
+			
+			
 		</Card>
 	);
 };

@@ -1,5 +1,4 @@
 import React , {useState} from "react";
-import "./Header.scss";
 import dayjs from "dayjs";
 import {
 	TextField,
@@ -9,6 +8,7 @@ import {
 	MenuItem,
 	Divider,
 	Typography,
+	Box,
 } from "@mui/material";
 import {
 	Settings,
@@ -40,7 +40,7 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 		setOpen(true);
 	};
 
-	const handleClose = (value: string) => {
+	const handleClose = () => {
 		setOpen(false);
 	};
 
@@ -67,12 +67,13 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 	};
 
 	return (
-		<div className="header">
-			<div className="left-group">
+		<Box sx={{display:'flex', justifyContent:'space-between', gap:1,alignItems:'center'}}>
+			<Box  sx={{m:1}}>
 				<Button
 					variant="outlined"
 					className="arrow-btn"
 					onClick={() => changeWeek("previous")}
+					sx={{m:1}}
 				>
 					<ChevronLeft />
 				</Button>
@@ -80,12 +81,12 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 					variant="outlined"
 					className="arrow-btn"
 					onClick={() => changeWeek("next")}
+					sx={{m:1}}
 				>
 					<ChevronRight />
 				</Button>
-			</div>
-			<div className="right-group">
-				<span></span>
+			</Box>
+			<Box sx={{m:1}}>
 				<TextField
 					label="Search"
 					variant="standard"
@@ -96,6 +97,7 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 					variant="outlined"
 					className="today-btn"
 					onClick={() => changeWeek("today")}
+					sx={{m:1}}
 				>
 					TODAY
 				</Button>
@@ -103,6 +105,7 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 					variant="contained"
 					className="new-event-btn"
 					onClick={handleClickOpen}
+					sx={{m:1}}
 				>
 					New Event
 				</Button>
@@ -113,29 +116,29 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 				<IconButton onClick={handleClickMenu}>
 					<Settings />
 				</IconButton>
-			</div>
+			</Box>
 			<Menu
-				className="menu-list"
+				
 				anchorEl={anchorEl}
 				id="account-menu"
 				open={openMenu}
 				onClose={handleCloseMenu}
 				onClick={handleCloseMenu}
-				transformOrigin={{ horizontal: "right", vertical: "top" }}
-				anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+				
+				
 			>
-				<MenuItem onClick={handleCloseMenu}>
-					<Typography className="student-name">
+				<MenuItem onClick={handleCloseMenu} sx={{display:'flex',flexDirection:'column', alignItems:'flex-start'}}>
+					<Typography  sx={{ fontWeight:'bold'}}>
 						mIRC Student
 					</Typography>
-					<Typography>only_legends@yahoo.com</Typography>
+					<Typography variant='caption'>only_legends@yahoo.com</Typography>
 				</MenuItem>
 				<Divider />
 				<MenuItem onClick={handleCloseMenu}>
-					<Logout className="log-out-icon" />
+					<Logout sx={{pr:1}}  />
 					Sign Out
 				</MenuItem>
 			</Menu>
-		</div>
+		</Box>
 	);
 };
