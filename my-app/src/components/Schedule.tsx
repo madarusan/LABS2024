@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import {
 	TableContainer,
 	Table,
@@ -9,7 +8,6 @@ import {
 	Typography,
 } from "@mui/material";
 import { Slot } from "./Slot";
-import { mocks } from "../assets/mocks";
 import { ICalendarEntry } from "../types";
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
