@@ -39,8 +39,8 @@ export const Slot = ({ details }: SlotProps) => {
 		setOpen(false);
 	};
 	const handleType = (type: number | string) => {
-		if (type === 0) return "Curs";
-		else if (type === 1) return "Laborator";
+		if (type === "0") return "Curs";
+		else if (type === "1") return "Laborator";
 		else return "Seminar";
 	};
 	return !details ? (

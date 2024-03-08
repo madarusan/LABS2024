@@ -46,7 +46,6 @@ export const Main = () => {
 			<Schedule
 				data={data}
 				weekDates={weekDates}
-				setWeekDates={setWeekDates}
 			/>
 		</Container>
 	);

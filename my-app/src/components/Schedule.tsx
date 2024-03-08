@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import {
 	TableContainer,
 	Table,
@@ -9,7 +8,6 @@ import {
 	Typography,
 } from "@mui/material";
 import { Slot } from "./Slot";
-import { mocks } from "../assets/mocks";
 import { ICalendarEntry } from "../types";
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
@@ -22,28 +20,10 @@ dayjs.extend(isSameOrBefore);
 export type ScheduleProps ={
 	data : ICalendarEntry[];
 	 weekDates : string[];
-	 setWeekDates :  (dates: string[]) => void;
 }
-export const Schedule = ({data, weekDates, setWeekDates} : ScheduleProps) => {
+export const Schedule = ({data, weekDates} : ScheduleProps) => {
 	const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 	const hoursDay = [8, 10, 12, 14, 16, 18, 20];
-	// const [data, setData] = useState<ICalendarEntry[]>([]);
-	// const [weekDates, setWeekDates] = useState<string[]>([]);
-	// useEffect(() => {
-	// 	const startOfWeek = dayjs().startOf('week');
-	// 	const endOfWeek = dayjs().endOf('week');
-
-	// 	const filteredData = mocks.filter(item => {
-	// 		const itemDate = dayjs(item.timeStamp);
-	// 		return itemDate.isSameOrAfter(startOfWeek) && itemDate.isSameOrBefore(endOfWeek);
-	// 	});
-	// 	setData(filteredData);
-
-	// 	const datesOfWeek = Array.from({ length: 5 }, (_, i) =>
-	// 		startOfWeek.add(i, "day").format("DD MMM")
-	// 	);
-	// 	setWeekDates(datesOfWeek);
-	// }, []);
 	return (
 		<TableContainer>
 			<Table
@@ -82,16 +62,10 @@ export const Schedule = ({data, weekDates, setWeekDates} : ScheduleProps) => {
 									{(() => {
 										let slotAdded = false;
 										const slots = data.map((item) => {
-											const itemDate = dayjs(
-												item.timeStamp
-											);
+											const itemDate = dayjs(item.timeStamp);
 											const itemHour = itemDate.hour();
-											const itemDay =
-												itemDate.format("dddd");
-											if (
-												itemDay === weekDay &&
-												itemHour === hour
-											) {
+											const itemDay = itemDate.format("dddd");
+											if (itemDay === weekDay && itemHour === hour) {
 												slotAdded = true;
 												return (
 													<Slot
@@ -100,14 +74,13 @@ export const Schedule = ({data, weekDates, setWeekDates} : ScheduleProps) => {
 															id: item.id,
 															title: item.title,
 															type: item.type,
-															timeStamp:
-																item.timeStamp,
-															location:
-																item.location,
+															timeStamp: item.timeStamp,
+															location: item.location,
 														}}
 													/>
 												);
 											}
+											return null; // Add this line to return a value at the end of the arrow function
 										});
 										if (!slotAdded) {
 											slots.push(<Slot />);
