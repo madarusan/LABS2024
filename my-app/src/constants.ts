@@ -1,0 +1,1 @@
+export const URL_API = "https://localhost:7298/calendar/entries";

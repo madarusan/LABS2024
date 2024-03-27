@@ -16,14 +16,15 @@ import {
 	ChevronRight,
 	Logout,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { EventModal } from "./Event-Modal";
+import { EventModal } from "./EventModal";
+import { getUser } from "../utils";
+import { useMsal } from "@azure/msal-react";
 export type HeaderProps = {
 	weekDates: string[];
 	setWeekDates: (dates: string[]) => void;
 };
 export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
-	const navigate = useNavigate();
+	const { instance } = useMsal();
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const openMenu = Boolean(anchorEl);
 	const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -32,7 +33,13 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 	const handleCloseMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(null);
 		if (event.currentTarget.textContent === "Sign Out") {
-			navigate("/");
+			// navigate("/");
+
+			instance.logoutPopup({
+				postLogoutRedirectUri: "/",
+				mainWindowRedirectUri: "/",
+			});
+			sessionStorage.clear()
 		}
 	};
 	const [open, setOpen] = useState(false);
@@ -58,22 +65,33 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 			});
 		} else if (direction === "today") {
 			const today = dayjs();
-			const startOfWeek = today.startOf('week').add(1, 'day'); // Start from Monday
-			newWeekDates = Array.from({ length: 5 }, (_, i) => // Only Monday to Friday
-				startOfWeek.add(i, 'day').format("Do MMMM")
+			const startOfWeek = today.startOf("week").add(1, "day"); // Start from Monday
+			newWeekDates = Array.from(
+				{ length: 5 },
+				(
+					_,
+					i // Only Monday to Friday
+				) => startOfWeek.add(i, "day").format("Do MMMM")
 			);
 		}
 		setWeekDates(newWeekDates);
 	};
 
 	return (
-		<Box sx={{display:'flex', justifyContent:'space-between', gap:1,alignItems:'center'}}>
-			<Box  sx={{m:1}}>
+		<Box
+			sx={{
+				display: "flex",
+				justifyContent: "space-between",
+				gap: 1,
+				alignItems: "center",
+			}}
+		>
+			<Box sx={{ m: 1 }}>
 				<Button
 					variant="outlined"
 					className="arrow-btn"
 					onClick={() => changeWeek("previous")}
-					sx={{m:1}}
+					sx={{ m: 1 }}
 				>
 					<ChevronLeft />
 				</Button>
@@ -81,12 +99,12 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 					variant="outlined"
 					className="arrow-btn"
 					onClick={() => changeWeek("next")}
-					sx={{m:1}}
+					sx={{ m: 1 }}
 				>
 					<ChevronRight />
 				</Button>
 			</Box>
-			<Box sx={{m:1}}>
+			<Box sx={{ m: 1 }}>
 				<TextField
 					label="Search"
 					variant="standard"
@@ -97,7 +115,7 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 					variant="outlined"
 					className="today-btn"
 					onClick={() => changeWeek("today")}
-					sx={{m:1}}
+					sx={{ m: 1 }}
 				>
 					TODAY
 				</Button>
@@ -105,7 +123,7 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 					variant="contained"
 					className="new-event-btn"
 					onClick={handleClickOpen}
-					sx={{m:1}}
+					sx={{ m: 1 }}
 				>
 					New Event
 				</Button>
@@ -118,24 +136,30 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 				</IconButton>
 			</Box>
 			<Menu
-				
 				anchorEl={anchorEl}
 				id="account-menu"
 				open={openMenu}
 				onClose={handleCloseMenu}
 				onClick={handleCloseMenu}
-				
-				
 			>
-				<MenuItem onClick={handleCloseMenu} sx={{display:'flex',flexDirection:'column', alignItems:'flex-start'}}>
-					<Typography  sx={{ fontWeight:'bold'}}>
-						mIRC Student
+				<MenuItem
+					onClick={handleCloseMenu}
+					sx={{
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "flex-start",
+					}}
+				>
+					<Typography sx={{ fontWeight: "bold" }}>
+						{getUser().name}
 					</Typography>
-					<Typography variant='caption'>only_legends@yahoo.com</Typography>
+					<Typography variant="caption">
+						{getUser().userEmail}
+					</Typography>
 				</MenuItem>
 				<Divider />
 				<MenuItem onClick={handleCloseMenu}>
-					<Logout sx={{pr:1}}  />
+					<Logout sx={{ pr: 1 }} />
 					Sign Out
 				</MenuItem>
 			</Menu>

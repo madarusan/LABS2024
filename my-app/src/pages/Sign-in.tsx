@@ -3,7 +3,10 @@ import { Button } from "@mui/material";
 import logo from "../assets/logo.svg";
 import "./Sign-in.scss";
 import { useNavigate } from "react-router-dom";
-export const SignInPage = () => {
+export type SignInProps = {
+	signIn: () => void;
+};
+export const SignInPage = ({ signIn }: SignInProps) => {
 	const navigate = useNavigate();
 
 	return (
@@ -16,7 +19,8 @@ export const SignInPage = () => {
 				variant="contained"
 				className="login-btn"
 				onClick={() => {
-					navigate("/home");
+					// navigate("/home");
+					signIn();
 				}}
 			>
 				LOGIN
