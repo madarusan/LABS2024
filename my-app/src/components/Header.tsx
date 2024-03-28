@@ -20,10 +20,9 @@ import { EventModal } from "./EventModal";
 import { getUser } from "../utils";
 import { useMsal } from "@azure/msal-react";
 export type HeaderProps = {
-	weekDates: string[];
-	setWeekDates: (dates: string[]) => void;
+	changeWeekDates: (dates: string) => void;
 };
-export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
+export const Header = ({ changeWeekDates }: HeaderProps) => {
 	const { instance } = useMsal();
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const openMenu = Boolean(anchorEl);
@@ -33,8 +32,6 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 	const handleCloseMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(null);
 		if (event.currentTarget.textContent === "Sign Out") {
-			// navigate("/");
-
 			instance.logoutPopup({
 				postLogoutRedirectUri: "/",
 				mainWindowRedirectUri: "/",
@@ -51,31 +48,6 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 		setOpen(false);
 	};
 
-	const changeWeek = (direction: string) => {
-		let newWeekDates = weekDates;
-		if (direction === "previous") {
-			newWeekDates = newWeekDates.map((date) => {
-				return dayjs(date, "Do MMMM")
-					.subtract(7, "day")
-					.format("Do MMMM");
-			});
-		} else if (direction === "next") {
-			newWeekDates = newWeekDates.map((date) => {
-				return dayjs(date, "Do MMMM").add(7, "day").format("Do MMMM");
-			});
-		} else if (direction === "today") {
-			const today = dayjs();
-			const startOfWeek = today.startOf("week").add(1, "day"); // Start from Monday
-			newWeekDates = Array.from(
-				{ length: 5 },
-				(
-					_,
-					i // Only Monday to Friday
-				) => startOfWeek.add(i, "day").format("Do MMMM")
-			);
-		}
-		setWeekDates(newWeekDates);
-	};
 
 	return (
 		<Box
@@ -90,7 +62,7 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 				<Button
 					variant="outlined"
 					className="arrow-btn"
-					onClick={() => changeWeek("previous")}
+					onClick={() => changeWeekDates("previous")}
 					sx={{ m: 1 }}
 				>
 					<ChevronLeft />
@@ -98,7 +70,7 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 				<Button
 					variant="outlined"
 					className="arrow-btn"
-					onClick={() => changeWeek("next")}
+					onClick={() => changeWeekDates("next")}
 					sx={{ m: 1 }}
 				>
 					<ChevronRight />
@@ -114,7 +86,7 @@ export const Header = ({ weekDates, setWeekDates }: HeaderProps) => {
 				<Button
 					variant="outlined"
 					className="today-btn"
-					onClick={() => changeWeek("today")}
+					onClick={() => changeWeekDates("today")}
 					sx={{ m: 1 }}
 				>
 					TODAY

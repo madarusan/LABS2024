@@ -58,10 +58,10 @@ export const PopulatedSlotButton = ({
 		>
 			<Box sx={{ p: 1 }}>
 				<Typography variant="body2">
-					{handleType(details.type)}
+					{handleType(details.type)} {details.title}
 				</Typography>
 				<Divider />
-				<Typography variant="caption">{details.title}</Typography>
+				{/* <Typography variant="caption">{details.title}</Typography> */}
 				<Typography variant="caption">{details.location}</Typography>
 			</Box>
 			<Box

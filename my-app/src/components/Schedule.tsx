@@ -18,7 +18,7 @@ dayjs.extend(weekOfYear);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 export type ScheduleProps ={
-	data : ICalendarEntry[];
+	data : ICalendarEntry[] | undefined;
 	 weekDates : string[];
 }
 export const Schedule = ({data, weekDates} : ScheduleProps) => {
@@ -59,34 +59,38 @@ export const Schedule = ({data, weekDates} : ScheduleProps) => {
 									size="medium"
 									key={weekDay}
 								>
-									{(() => {
-										let slotAdded = false;
-										const slots = data.map((item) => {
-											const itemDate = dayjs(item.timeStamp);
-											const itemHour = itemDate.hour();
-											const itemDay = itemDate.format("dddd");
-											if (itemDay === weekDay && itemHour === hour) {
-												slotAdded = true;
-												return (
-													<Slot
-														key={item.id}
-														details={{
-															id: item.id,
-															title: item.title,
-															type: item.type,
-															timeStamp: item.timeStamp,
-															location: item.location,
-														}}
-													/>
-												);
-											}
-											return null; // Add this line to return a value at the end of the arrow function
-										});
-										if (!slotAdded) {
-											slots.push(<Slot />);
+									{data?.map((item) => {
+										console.log(data);
+										const itemDate = dayjs(item.timeStamp);
+										const itemHour = itemDate
+											.add(2, "hour")
+											.hour();
+										const itemDay = itemDate
+											.add(2, "hour")
+											.format("dddd");
+//TO DO : check why the populated slot is not showing up
+										if (
+											itemDay === weekDay &&
+											itemHour === hour
+										) {
+											console.log(item);
+											return (
+												<Slot
+													key={item.id}
+													details={{
+														id: item.id,
+														title: item.title,
+														type: item.type,
+														timeStamp:
+															item.timeStamp,
+														location: item.location,
+													}}
+												/>
+											);
 										}
-										return slots;
-									})()}
+
+										return <Slot />;
+									})}
 								</TableCell>
 							))}
 						</TableRow>

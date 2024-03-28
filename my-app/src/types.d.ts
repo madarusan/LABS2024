@@ -1,5 +1,5 @@
 export interface ICalendarEntry {
-	id: any;
+	id: string;
 	title: string;
 	timeStamp: string;
 	type: string;
